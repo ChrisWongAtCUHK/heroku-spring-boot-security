@@ -49,9 +49,11 @@ public class TokenService {
 
     // 產生 token
     String accessToken = createAccessToken(userDetails.getUsername());
+    String refreshToken = createRefreshToken(userDetails.getUsername());
 
     LoginResponse res = new LoginResponse();
     res.setAccessToken(accessToken);
+    res.setRefreshToken(refreshToken);
     res.setUserId(userDetails.getId());
     res.setEmail(userDetails.getUsername());
     res.setUserAuthority(userDetails.getUserAuthority());
@@ -82,8 +84,33 @@ public class TokenService {
         .compact();
   }
 
+  private String createRefreshToken(String username) {
+    long expirationMillis = Instant.now()
+        .plusSeconds(600)
+        .getEpochSecond()
+        * 1000;
+
+    Claims claims = Jwts.claims();
+    claims.setSubject("Refresh Token");
+    claims.setIssuedAt(new Date());
+    claims.setExpiration(new Date(expirationMillis));
+    claims.put("username", username);
+
+    return Jwts.builder()
+        .setClaims(claims)
+        .signWith(secretKey)
+        .compact();
+  }
+
   public Map<String, Object> parseToken(String token) {
     Claims claims = jwtParser.parseClaimsJws(token).getBody();
     return new HashMap<>(claims);
+  }
+
+  public String refreshAccessToken(String refreshToken) {
+    Map<String, Object> payload = parseToken(refreshToken);
+    String username = (String) payload.get("username");
+
+    return createAccessToken(username);
   }
 }

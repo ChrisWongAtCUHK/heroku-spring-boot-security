@@ -67,6 +67,33 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "refreshAccessToken",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"refreshToken\": \"{{refresh_token}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/auth/refresh-token",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "auth",
+            "refresh-token"
+          ]
+        }
+      },
+      "response": []
     }
   ],
   "variable": [
@@ -76,6 +103,10 @@
     },
     {
       "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
       "value": ""
     }
   ]
