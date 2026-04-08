@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.heroku.model.AppUserDetails;
 import com.heroku.model.jwt.LoginRequest;
 import com.heroku.model.jwt.LoginResponse;
 
@@ -44,12 +44,19 @@ public class TokenService {
     // 執行帳密認證
     authToken = authenticationProvider.authenticate(authToken);
 
-    // 認證成功後取得結果
-    UserDetails userDetails = (UserDetails) authToken.getPrincipal();
+    // 以自定義的 UserDetails 接收已認證的使用者
+    AppUserDetails userDetails = (AppUserDetails) authToken.getPrincipal();
+
+    // 產生 token
     String accessToken = createAccessToken(userDetails.getUsername());
 
     LoginResponse res = new LoginResponse();
     res.setAccessToken(accessToken);
+    res.setUserId(userDetails.getId());
+    res.setEmail(userDetails.getUsername());
+    res.setUserAuthority(userDetails.getUserAuthority());
+    res.setPremium(userDetails.isPremium());
+    res.setTrailExpiration(userDetails.getTrailExpiration());
 
     return res;
   }
