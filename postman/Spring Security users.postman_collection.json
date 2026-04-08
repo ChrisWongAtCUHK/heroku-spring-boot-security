@@ -35,6 +35,16 @@
     {
       "name": "getAllUsers",
       "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBY2Nlc3MgVG9rZW4iLCJpYXQiOjE3NzU2NTM3NzcsImV4cCI6MTc3NTY1Mzg2NywidXNlcm5hbWUiOiJkb3JhQGdtYWlsLmNvbSJ9.s5kmF_NKDHfynp-AQybQx1gSJd4cqFPfFfaB8J7KeoE",
+              "type": "string"
+            }
+          ]
+        },
         "method": "GET",
         "header": [],
         "url": {
@@ -55,13 +65,13 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{base_url}}/users/101",
+          "raw": "{{base_url}}/users/102",
           "host": [
             "{{base_url}}"
           ],
           "path": [
             "users",
-            "101"
+            "102"
           ]
         }
       },
