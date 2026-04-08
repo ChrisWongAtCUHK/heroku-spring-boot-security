@@ -1,10 +1,15 @@
 package com.heroku.model;
 
+import java.time.LocalDate;
+
 public class AppUser {
   private String id;
   private String email;
   private String password;
   private UserAuthority authority;
+  private boolean enabled = true;
+  private boolean premium = false;
+  private LocalDate trailExpiration;
 
   public String getId() {
     return id;
@@ -38,6 +43,30 @@ public class AppUser {
     this.authority = authority;
   }
 
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public boolean isPremium() {
+    return premium;
+  }
+
+  public void setPremium(boolean premium) {
+    this.premium = premium;
+  }
+
+  public LocalDate getTrailExpiration() {
+    return trailExpiration;
+  }
+
+  public void setTrailExpiration(LocalDate trailExpiration) {
+    this.trailExpiration = trailExpiration;
+  }
+
   public static AppUser getTestAdminUser() {
     var user = new AppUser();
     user.id = "100";
@@ -64,6 +93,9 @@ public class AppUser {
     user.email = "ivy@gmail.com";
     user.password = "000000";
     user.authority = UserAuthority.GUEST;
+
+    user.enabled = false;
+    user.trailExpiration = LocalDate.of(2022, 12, 31);
 
     return user;
   }
