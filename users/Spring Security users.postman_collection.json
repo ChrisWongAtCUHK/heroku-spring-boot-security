@@ -1,0 +1,71 @@
+{
+  "info": {
+    "_postman_id": "71ce921f-fe58-429a-a12c-243a6e3d4269",
+    "name": "Spring Security users",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20575236"
+  },
+  "item": [
+    {
+      "name": "createUser",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": \"102\",\n    \"email\": \"foo@gmail.com\",\n    \"password\": \"111111\",\n    \"authority\": \"GUEST\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getAllUsers",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "getUser",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/users/101",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users",
+            "101"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
