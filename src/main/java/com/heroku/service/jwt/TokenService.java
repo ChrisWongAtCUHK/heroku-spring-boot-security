@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.heroku.model.jwt.LoginRequest;
@@ -21,6 +26,8 @@ import jakarta.annotation.PostConstruct;
 public class TokenService {
   private Key secretKey;
   private JwtParser jwtParser;
+  @Autowired
+  private AuthenticationProvider authenticationProvider;
 
   @PostConstruct
   private void init() {
@@ -31,7 +38,15 @@ public class TokenService {
   }
 
   public LoginResponse createToken(LoginRequest request) {
-    String accessToken = createAccessToken(request.getUsername());
+    // 封裝帳密
+    Authentication authToken = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
+
+    // 執行帳密認證
+    authToken = authenticationProvider.authenticate(authToken);
+
+    // 認證成功後取得結果
+    UserDetails userDetails = (UserDetails) authToken.getPrincipal();
+    String accessToken = createAccessToken(userDetails.getUsername());
 
     LoginResponse res = new LoginResponse();
     res.setAccessToken(accessToken);
