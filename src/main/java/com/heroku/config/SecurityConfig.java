@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -18,9 +20,11 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(auth -> auth
         .requestMatchers(HttpMethod.POST, "/users").permitAll()
-        .requestMatchers(HttpMethod.GET, "/users/?*").permitAll()
+        .requestMatchers(HttpMethod.GET, "/users/?*").hasAnyAuthority("ADMIN", "NORMAL")
+        .requestMatchers(HttpMethod.GET, "/users").hasAuthority("ADMIN")
         .anyRequest().authenticated())
-        .csrf(AbstractHttpConfigurer::disable);
+        .csrf(AbstractHttpConfigurer::disable)
+        .formLogin(withDefaults()); // 開啟內建登入畫面 (測試用途)
 
     return http.build();
   }
