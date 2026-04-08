@@ -3,6 +3,8 @@ package com.heroku.service.jwt;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,7 @@ import com.heroku.model.jwt.LoginRequest;
 import com.heroku.model.jwt.LoginResponse;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -17,11 +20,14 @@ import jakarta.annotation.PostConstruct;
 @Service
 public class TokenService {
   private Key secretKey;
+  private JwtParser jwtParser;
 
   @PostConstruct
   private void init() {
     String key = "VincentIsParticipatingItHomeIronmanContest";
     secretKey = Keys.hmacShaKeyFor(key.getBytes());
+
+    jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
   }
 
   public LoginResponse createToken(LoginRequest request) {
@@ -52,5 +58,10 @@ public class TokenService {
         .setClaims(claims)
         .signWith(secretKey)
         .compact();
+  }
+
+  public Map<String, Object> parseToken(String token) {
+    Claims claims = jwtParser.parseClaimsJws(token).getBody();
+    return new HashMap<>(claims);
   }
 }
